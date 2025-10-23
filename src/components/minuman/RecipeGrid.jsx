@@ -1,10 +1,14 @@
 // src/components/minuman/RecipeGrid.jsx
-import { Clock, Star, ChefHat } from 'lucide-react';
+import { Clock, Star, ChefHat, Heart } from 'lucide-react';
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useFavorites } from '../../context/FavoritesContext';
 
 export default function RecipeGrid({ recipes }) {
   const [visibleCards, setVisibleCards] = useState(new Set());
   const cardRefs = useRef([]);
+  const navigate = useNavigate();
+  const { isFavorite, toggleFavorite } = useFavorites();
 
   useEffect(() => {
     cardRefs.current = cardRefs.current.slice(0, recipes.length);
@@ -52,10 +56,31 @@ export default function RecipeGrid({ recipes }) {
             }`}
           >
             {/* Card structure is consistent, only the tag is changed */}
-            <div className="relative bg-white/15 backdrop-blur-xl border border-white/25 rounded-2xl md:rounded-3xl overflow-hidden shadow-lg md:shadow-2xl shadow-green-500/5 hover:shadow-green-500/15 transition-all duration-500 cursor-pointer group-hover:scale-105 group-hover:bg-white/20">
+            <div
+              onClick={() => navigate(`/detail/minuman/${recipe.id}`)}
+              className="relative bg-white/15 backdrop-blur-xl border border-white/25 rounded-2xl md:rounded-3xl overflow-hidden shadow-lg md:shadow-2xl shadow-green-500/5 hover:shadow-green-500/15 transition-all duration-500 cursor-pointer group-hover:scale-105 group-hover:bg-white/20"
+            >
+              {/* Favorite Button */}
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleFavorite(recipe);
+                }}
+                className="absolute top-4 right-4 z-10 p-2 bg-white/90 backdrop-blur-sm rounded-full shadow-lg hover:bg-white transition-colors"
+              >
+                <Heart
+                  size={20}
+                  className={`${
+                    isFavorite(recipe.id)
+                      ? 'fill-red-500 text-red-500'
+                      : 'text-gray-400'
+                  } transition-colors`}
+                />
+              </button>
+
               <div className="absolute inset-0 bg-gradient-to-br from-white/5 via-transparent to-green-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative h-32 md:h-56 overflow-hidden">
-                <img 
+                <img
                   src={recipe.image_url}
                   alt={recipe.name}
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"

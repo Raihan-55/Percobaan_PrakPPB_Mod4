@@ -1,12 +1,18 @@
 // src/components/DesktopNavbar.jsx
+import { useLocation, useNavigate } from 'react-router-dom';
+import { Heart } from 'lucide-react';
 import logoUrl from '../../assets/LOGORN.png';
 
-export default function DesktopNavbar({ currentPage, onNavigate }) {
+export default function DesktopNavbar() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const navItems = [
-    { id: 'home', label: 'Beranda' },
-    { id: 'makanan', label: 'Makanan' },
-    { id: 'minuman', label: 'Minuman' },
-    { id: 'profile', label: 'Profile' }
+    { id: '/', label: 'Beranda' },
+    { id: '/makanan', label: 'Makanan' },
+    { id: '/minuman', label: 'Minuman' },
+    { id: '/favorites', label: 'Favorit', icon: Heart },
+    { id: '/profile', label: 'Profile' }
   ];
 
   return (
@@ -38,19 +44,25 @@ export default function DesktopNavbar({ currentPage, onNavigate }) {
 
           {/* Navigation Links */}
           <div className="flex items-center space-x-10">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => onNavigate(item.id)}
-                className={`px-4 py-3 text-base font-medium transition-all duration-200 border-b-2 ${
-                  currentPage === item.id
-                    ? 'text-blue-600 border-blue-500'
-                    : 'text-slate-600 border-transparent hover:text-blue-500 hover:border-blue-300'
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
+            {navItems.map((item) => {
+              const isActive = location.pathname === item.id;
+              const IconComponent = item.icon;
+
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => navigate(item.id)}
+                  className={`px-4 py-3 text-base font-medium transition-all duration-200 border-b-2 flex items-center space-x-2 ${
+                    isActive
+                      ? 'text-blue-600 border-blue-500'
+                      : 'text-slate-600 border-transparent hover:text-blue-500 hover:border-blue-300'
+                  }`}
+                >
+                  {IconComponent && <IconComponent size={18} />}
+                  <span>{item.label}</span>
+                </button>
+              );
+            })}
           </div>
          
         </div>

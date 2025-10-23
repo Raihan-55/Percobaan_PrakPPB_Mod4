@@ -1,12 +1,17 @@
 // src/components/MobileNavbar.jsx
-import { Home, ChefHat, Coffee, User } from 'lucide-react';
+import { Home, ChefHat, Coffee, User, Heart } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-export default function MobileNavbar({ currentPage, onNavigate }) {
+export default function MobileNavbar() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
   const navItems = [
-    { id: 'home', label: 'Beranda', icon: Home },
-    { id: 'makanan', label: 'Makanan', icon: ChefHat },
-    { id: 'minuman', label: 'Minuman', icon: Coffee },
-    { id: 'profile', label: 'Profile', icon: User }
+    { id: '/', label: 'Beranda', icon: Home },
+    { id: '/makanan', label: 'Makanan', icon: ChefHat },
+    { id: '/minuman', label: 'Minuman', icon: Coffee },
+    { id: '/favorites', label: 'Favorit', icon: Heart },
+    { id: '/profile', label: 'Profile', icon: User }
   ];
 
   return (
@@ -14,18 +19,18 @@ export default function MobileNavbar({ currentPage, onNavigate }) {
       <div className="flex items-center justify-around max-w-sm mx-auto">
         {navItems.map((item) => {
           const IconComponent = item.icon;
-          const isActive = currentPage === item.id;
-          
+          const isActive = location.pathname === item.id;
+
           return (
             <button
               key={item.id}
-              onClick={() => onNavigate(item.id)}
+              onClick={() => navigate(item.id)}
               className={`flex flex-col items-center py-2 px-3 transition-colors duration-200 ${
                 isActive ? 'text-blue-600' : 'text-gray-400'
               }`}
             >
-              <IconComponent 
-                size={20} 
+              <IconComponent
+                size={20}
                 className="mb-1"
                 strokeWidth={isActive ? 2 : 1.5}
               />
