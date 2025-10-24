@@ -8,7 +8,6 @@ export default function FavoritePage() {
   const { favorites, toggleFavorite } = useFavorites();
   const [visibleCards, setVisibleCards] = useState(new Set());
   const cardRefs = useRef([]);
-console.log('Favorites:', favorites);
   useEffect(() => {
     cardRefs.current = cardRefs.current.slice(0, favorites.length);
 
